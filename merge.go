@@ -194,9 +194,9 @@ func mergeInterfaces(schema *ast.Schema, previousDefinition *ast.Definition, new
 	//}
 
 	// fields
-	if len(previousDefinition.Fields) != len(newDefinition.Fields) {
-		return fmt.Errorf("inconsistent number of fields")
-	}
+	//if len(previousDefinition.Fields) != len(newDefinition.Fields) {
+	//	return fmt.Errorf("inconsistent number of fields")
+	//}
 	for _, field := range previousDefinition.Fields {
 		// get the corresponding field in the other definition
 		otherField := newDefinition.Fields.ForName(field.Name)
@@ -394,6 +394,7 @@ func mergeFieldsEqual(field1, field2 *ast.FieldDefinition) error {
 	//}
 
 	// fields
+	fmt.Println("merging field1 and field2: ", field1, field2)
 	if err := mergeTypesEqual(field1.Type, field2.Type); err != nil {
 		return fmt.Errorf("fields are not equal: %v", err.Error())
 	}
@@ -559,6 +560,7 @@ func mergeValuesEqual(value1, value2 *ast.Value) error {
 }
 
 func mergeTypesEqual(type1, type2 *ast.Type) error {
+	fmt.Println("merge types equal: ", type1, type2)
 	// if one is null and the other isn't
 	if (type1 == nil && type2 != nil) || (type1 != nil && type2 == nil) {
 		return errors.New("one is a list the other isn't")
