@@ -18,4 +18,4 @@ require (
 
 go 1.13
 
-replace github.com/nautilus/graphql => ../graphql
+replace github.com/nautilus/graphql => github.com/sothychan/graphql v0.1.0
