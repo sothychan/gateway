@@ -4,9 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/vektah/gqlparser/v2/ast"
 	"strings"
-
-	"github.com/vektah/gqlparser/ast"
 
 	"github.com/nautilus/graphql"
 )

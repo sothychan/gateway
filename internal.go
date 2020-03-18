@@ -3,10 +3,10 @@ package gateway
 import (
 	"context"
 	"fmt"
+	"github.com/vektah/gqlparser/v2/ast"
 
 	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/mitchellh/mapstructure"
-	"github.com/vektah/gqlparser/ast"
 
 	"github.com/nautilus/graphql"
 )
