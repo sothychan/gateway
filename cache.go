@@ -90,6 +90,8 @@ type AutomaticQueryPlanCache struct {
 	resetTimer bool
 	// a mutex on the timer bool
 	timeMutex sync.Mutex
+	// a mutex on the cache
+	cacheMutex sync.RWMutex
 }
 
 // WithCacheTTL updates and returns the cache with the new cache lifetime. Queries that haven't been
@@ -159,6 +161,7 @@ func (c *AutomaticQueryPlanCache) Retrieve(ctx *PlanningContext, hash *string, p
 					c.timeMutex.Unlock()
 
 					// loop over every time in the cache
+					c.cacheMutex.Lock()
 					for key, cacheItem := range c.cache {
 						// if the cached query hasn't been used recently enough
 						if cacheItem.LastUsed.Before(time.Now().Add(-c.ttl)) {
@@ -166,6 +169,7 @@ func (c *AutomaticQueryPlanCache) Retrieve(ctx *PlanningContext, hash *string, p
 							delete(c.cache, key)
 						}
 					}
+					c.cacheMutex.Unlock()
 
 					// stop consuming
 					break TRUE_LOOP
@@ -176,6 +180,8 @@ func (c *AutomaticQueryPlanCache) Retrieve(ctx *PlanningContext, hash *string, p
 	}()
 
 	// if we have a cached value for the hash
+	c.cacheMutex.Lock()
+	defer c.cacheMutex.Unlock()
 	if cached, hasCachedValue := c.cache[*hash]; hasCachedValue {
 		// update the last used
 		cached.LastUsed = time.Now()
